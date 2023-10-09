@@ -8,9 +8,6 @@ class UserModel {
   });
 
   UserModel.fromJson(Map<dynamic, dynamic> map) {
-    if (map == null) {
-      return;
-    }
     userId = map['userId'];
     email = map['email'];
     name = map['name'];

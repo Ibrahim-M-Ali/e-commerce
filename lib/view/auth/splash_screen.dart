@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:operations/constants.dart';
+import '../../constants.dart';
 import 'package:get/get.dart';
-import 'package:operations/view/auth/login_screen.dart';
+import 'login_screen.dart';
 
 import '../widgets/custom_button.dart';
 import '../widgets/custom_text.dart';

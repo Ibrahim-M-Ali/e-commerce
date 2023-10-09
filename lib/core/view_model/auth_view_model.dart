@@ -1,17 +1,30 @@
-import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:operations/core/services/firestore_user.dart';
-import 'package:operations/model/user_model.dart';
-import '../../../../view/home_view.dart';
-part 'auth_state.dart';
+import 'package:operations/view/auth/login_screen.dart';
 
-class AuthCubit extends Cubit<AuthState> {
-  AuthCubit() : super(AuthInitial());
+import '../../../../model/user_model.dart';
+import '../../view/home_view.dart';
+import '../services/firestore_user.dart';
 
+class AuthViewModel extends GetxController {
   late String email, password, name;
   FirebaseAuth auth = FirebaseAuth.instance;
+
+  final Rx<User?> _user = Rx<User?>(null);
+
+  String? get user => _user.value?.email;
+
+  @override
+  void onInit() {
+    super.onInit();
+    _user.bindStream(auth.authStateChanges());
+  }
+
+  Future<void> signOut() async {
+    await auth.signOut();
+    Get.offAll(() => LoginScreen());
+  }
 
   void signInWithGoogle() async {
     try {
@@ -31,10 +44,16 @@ class AuthCubit extends Cubit<AuthState> {
       // Once signed in, return the UserCredential
 
       await FirebaseAuth.instance.signInWithCredential(credential);
-      emit(AuthAuthenticated());
-      Get.to(const HomeView());
+      var userModel = UserModel(
+          userId: FirebaseAuth.instance.currentUser!.uid,
+          email: FirebaseAuth.instance.currentUser!.email!,
+          name: FirebaseAuth.instance.currentUser!.displayName!,
+          pic: '');
+
+      await FireStoreUser().addUserToFirestore(userModel);
+
+      Get.to(() => HomeView());
     } catch (e) {
-      emit(AuthError(e.toString()));
       Get.snackbar('Error ', e.toString(), snackPosition: SnackPosition.BOTTOM);
     }
   }
@@ -44,10 +63,9 @@ class AuthCubit extends Cubit<AuthState> {
       await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
 
-      emit(AuthAuthenticated());
-      Get.to(const HomeView());
+      Get.to(() => HomeView());
     } catch (e) {
-      emit(AuthError(e.toString()));
+      // print();
       Get.snackbar('Error ', e.toString(), snackPosition: SnackPosition.BOTTOM);
     }
   }
@@ -60,16 +78,17 @@ class AuthCubit extends Cubit<AuthState> {
     try {
       await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: password);
-      UserModel userModel = UserModel(
+
+      var userModel = UserModel(
           userId: FirebaseAuth.instance.currentUser!.uid,
           email: FirebaseAuth.instance.currentUser!.email!,
           name: name,
           pic: '');
+
       await FireStoreUser().addUserToFirestore(userModel);
-      emit(AuthAuthenticated());
-      Get.to(const HomeView());
+
+      Get.to(() => HomeView());
     } catch (e) {
-      emit(AuthError(e.toString()));
       Get.snackbar('Error ', e.toString(), snackPosition: SnackPosition.BOTTOM);
     }
   }

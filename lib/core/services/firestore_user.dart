@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:operations/model/user_model.dart';
+
+import '../../model/user_model.dart';
 
 class FireStoreUser {
   final CollectionReference _users =
@@ -9,8 +10,7 @@ class FireStoreUser {
     try {
       return _users.doc(userModel.userId).set(userModel.toJson());
     } catch (e) {
-      print(
-          'Erroraaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaانا اهووووووووو adding user to Firestore: $e');
+      print('Error adding user to Firestore: $e');
     }
   }
 }
