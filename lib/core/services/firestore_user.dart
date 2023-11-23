@@ -13,4 +13,8 @@ class FireStoreUser {
       print('Error adding user to Firestore: $e');
     }
   }
+
+  Future<DocumentSnapshot> getCurrentUser(String uid) async {
+    return _users.doc(uid).get();
+  }
 }

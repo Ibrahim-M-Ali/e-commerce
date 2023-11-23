@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../view/cart_view.dart';
-import '../../view/favorite_view.dart';
 import '../../view/home_view.dart';
 import '../../view/profile_view.dart';
 
@@ -24,15 +23,13 @@ class ControlViewModel extends GetxController {
         }
       case 1:
         {
-          _currentScreen = const FavoriteView();
+          _currentScreen = CartView();
+          break;
         }
       case 2:
         {
-          _currentScreen = const CartView();
-        }
-      case 3:
-        {
-          _currentScreen = const ProfileView();
+          _currentScreen = ProfileView();
+          break;
         }
     }
     update();

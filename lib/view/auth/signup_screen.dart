@@ -6,9 +6,9 @@ import '../widgets/custom_button.dart';
 import '../widgets/custom_text.dart';
 import '../../constants.dart';
 import '../widgets/custom_text_form.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class SignupScreen extends GetWidget<AuthViewModel> {
-  bool obscureText = true;
+class SignupScreen extends StatelessWidget {
   String? name, email, password;
   final _formKey = GlobalKey<FormState>();
 
@@ -17,6 +17,7 @@ class SignupScreen extends GetWidget<AuthViewModel> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        toolbarHeight: 60,
         leading: InkWell(
           onTap: () {
             Get.off(LoginScreen());
@@ -30,120 +31,163 @@ class SignupScreen extends GetWidget<AuthViewModel> {
         elevation: 0,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Center(
-          child: Form(
-            // autovalidateMode: AutovalidateMode.a,
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Center(
-                  child: CustomText(
-                    text: "Sign Up",
-                    fontWeight: FontWeight.bold,
-                    fontSize: 30,
-                  ),
-                ),
-                const SizedBox(
-                  height: 40,
-                ),
+        padding: const EdgeInsets.all(15.0),
+        child: GetBuilder(
+          init: AuthViewModel(),
+          builder: (controller) => Center(
+            child: Form(
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              key: _formKey,
+              child: ListView(children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    CustomTextFormFiled(
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter Name';
-                        }
-                        return null;
-                      },
-                      onSaved: (value) {
-                        name = value;
-                      },
-                      labelText: "Full Name",
-                    ),
-                    CustomTextFormFiled(
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter vaild Email';
-                        }
-                        return null;
-                      },
-                      onSaved: (value) {
-                        email = value;
-                      },
-                      labelText: "Email",
+                    const CustomText(
+                      text: "Sign Up",
+                      fontWeight: FontWeight.w600,
+                      color: kLightBlack,
+                      fontSize: 36,
                     ),
                     const SizedBox(
-                      height: 15,
+                      height: 10,
                     ),
-                    CustomTextFormFiled(
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter vaild Password';
-                        }
-                        return null;
-                      },
-                      onSaved: (value) {
-                        password = value;
-                      },
-                      labelText: "Password",
-                      obscureText: obscureText,
-                      icon: IconButton(
-                          color: primaryColor,
-                          onPressed: () {
-                            // setState(() {});
-                            obscureText = !obscureText;
+                    const CustomText(
+                      fontSize: 14,
+                      color: Color(0xFF888888),
+                      text:
+                          'Let’s get you all set up so you can verify your personal account and begin setting up your profile',
+                    ),
+                    const SizedBox(
+                      height: 25,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const CustomText(
+                          color: kLightBlack,
+                          text: "Full Name",
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        CustomTextFormFiled(
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter Name';
+                            }
+                            return null;
                           },
-                          icon: const Icon(Icons.remove_red_eye_rounded)),
-                    ),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    Center(
-                      child: CustomButton(
-                        onPressed: () {
-                          _formKey.currentState!.save();
-                          if (_formKey.currentState!.validate()) {
-                            controller.createAccountWithEmailAndPassword(
-                                name!, email!, password!);
-                          }
-                        },
-                        text: 'Sign Up',
-                        color: primaryColor,
-                        textColor: Colors.white,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    Center(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const CustomText(
-                            text: 'Already have an account ?',
-                            color: Color(0xFF848484),
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          InkWell(
-                            onTap: () {
-                              Get.to(LoginScreen());
+                          onSaved: (value) {
+                            name = value;
+                          },
+                          labelText: "Full Name",
+                        ),
+                        const CustomText(
+                          color: kLightBlack,
+                          text: "Email",
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        CustomTextFormFiled(
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter vaild Email';
+                            }
+                            return null;
+                          },
+                          onSaved: (value) {
+                            email = value;
+                          },
+                          labelText: "Email",
+                        ),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        const CustomText(
+                          color: kLightBlack,
+                          text: "Password",
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        CustomTextFormFiled(
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter vaild Password';
+                            }
+                            return null;
+                          },
+                          onSaved: (value) {
+                            password = value;
+                          },
+                          labelText: "Password",
+                          obscureText: controller.obscureText,
+                          icon: IconButton(
+                            color: kLightBlack,
+                            onPressed: () {
+                              controller.showPassword();
                             },
-                            child: const CustomText(
-                              text: 'Sign In',
-                              fontWeight: FontWeight.bold,
+                            icon: const Icon(
+                              FontAwesomeIcons.eyeSlash,
+                              size: 20,
                             ),
                           ),
-                        ],
-                      ),
-                    )
+                        ),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        Center(
+                          child: CustomButton(
+                            onPressed: () {
+                              _formKey.currentState!.save();
+                              if (_formKey.currentState!.validate()) {
+                                controller.createAccountWithEmailAndPassword(
+                                    name!, email!, password!);
+                              }
+                            },
+                            text: 'Sign Up',
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        Center(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const CustomText(
+                                text: 'Already have an account?',
+                                color: kLightBlack,
+                              ),
+                              const SizedBox(
+                                width: 5,
+                              ),
+                              InkWell(
+                                onTap: () {
+                                  Get.to(LoginScreen());
+                                },
+                                child: const CustomText(
+                                  text: 'Sign In',
+                                  fontWeight: FontWeight.w600,
+                                  color: kLightBlack,
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
                   ],
                 ),
-              ],
+              ]),
             ),
           ),
         ),

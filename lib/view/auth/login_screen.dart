@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import '../../constants.dart';
 import '../../core/view_model/auth_view_model.dart';
+import '../widgets/line_shape.dart';
 import 'signup_screen.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/custom_sign_button.dart';
@@ -12,7 +12,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../widgets/custom_text_form.dart';
 
 class LoginScreen extends GetWidget<AuthViewModel> {
-  bool obscureText = true;
   String? email, password;
   final _formKey = GlobalKey<FormState>();
   @override
@@ -20,30 +19,48 @@ class LoginScreen extends GetWidget<AuthViewModel> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        toolbarHeight: 60,
         backgroundColor: Colors.white,
         elevation: 0,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Center(
-          child: Form(
-            key: _formKey,
-            child: ListView(
-              // crossAxisAlignment: CrossAxisAlignment.start,
+        padding: const EdgeInsets.all(15.0),
+        child: Form(
+          key: _formKey,
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Center(
-                  child: CustomText(
-                    text: "Login",
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold,
-                  ),
+                const CustomText(
+                  color: kLightBlack,
+                  text: "Sign in",
+                  fontSize: 36,
+                  fontWeight: FontWeight.w600,
                 ),
                 const SizedBox(
-                  height: 40,
+                  height: 10,
+                ),
+                const CustomText(
+                  fontSize: 14,
+                  color: Color(0xFF888888),
+                  text:
+                      'Welcome, please put your login credentials below to start using the app',
+                ),
+                const SizedBox(
+                  height: 25,
                 ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    const CustomText(
+                      color: kLightBlack,
+                      text: "Email",
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
                     CustomTextFormFiled(
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -57,26 +74,42 @@ class LoginScreen extends GetWidget<AuthViewModel> {
                       },
                     ),
                     const SizedBox(
-                      height: 15,
+                      height: 5,
                     ),
-                    CustomTextFormFiled(
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter vaild Password';
-                        }
-                        return null;
-                      },
-                      onSaved: (value) {
-                        password = value!;
-                      },
-                      labelText: "Password",
-                      obscureText: obscureText,
-                      icon: IconButton(
-                          color: primaryColor,
+                    const CustomText(
+                      color: kLightBlack,
+                      text: "Password",
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    GetBuilder<AuthViewModel>(
+                      builder: (controller) => CustomTextFormFiled(
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter vaild Password';
+                          }
+                          return null;
+                        },
+                        onSaved: (value) {
+                          password = value!;
+                        },
+                        labelText: "Password",
+                        obscureText: controller.obscureText,
+                        icon: IconButton(
+                          color: kLightBlack,
                           onPressed: () {
-                            obscureText = !obscureText;
+                            controller.showPassword();
                           },
-                          icon: const Icon(Icons.remove_red_eye_rounded)),
+                          icon: const Icon(
+                            FontAwesomeIcons.eyeSlash,
+                            color: kLightBlack,
+                            size: 20,
+                          ),
+                        ),
+                      ),
                     ),
                     const SizedBox(
                       height: 15,
@@ -90,51 +123,63 @@ class LoginScreen extends GetWidget<AuthViewModel> {
                                 email!, password!);
                           }
                         },
-                        text: 'Login',
-                        color: primaryColor,
-                        textColor: Colors.white,
+                        text: 'Sign in',
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                     const SizedBox(
                       height: 15,
+                    ),
+                    const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        LineShape(),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        CustomText(text: 'Or continue with '),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        LineShape(),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    Center(
+                      child: CustomSignButton(
+                        onTap: () {
+                          controller.signInWithGoogle();
+                        },
+                        icon: FontAwesomeIcons.google,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 60,
                     ),
                     Center(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           const CustomText(
-                            text: 'Don\'t have an account ?',
-                            color: Color(0xFF848484),
+                            text: 'Don\'t have an account?',
                           ),
                           const SizedBox(
-                            width: 10,
+                            width: 5,
                           ),
                           InkWell(
                             onTap: () {
                               Get.to(SignupScreen());
                             },
                             child: const CustomText(
-                              text: 'Sign Up',
+                              text: 'Register now',
                               color: Colors.black,
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
                         ],
                       ),
-                    ),
-                    SizedBox(
-                      height: 50,
-                    ),
-                    Center(
-                      child: CustomSignButton(
-                          onTap: () {
-                            controller.signInWithGoogle();
-                          },
-                          icon: FontAwesomeIcons.google,
-                          text: 'Sign In with Google'),
-                    ),
-                    SizedBox(
-                      height: 15,
                     ),
                   ],
                 ),

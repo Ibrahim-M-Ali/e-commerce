@@ -1,166 +1,114 @@
 import 'package:flutter/material.dart';
+import 'package:operations/view/featured_page.dart';
+import 'collection_page.dart';
 import '../constants.dart';
-import 'widgets/custom_text.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class HomeView extends StatelessWidget {
-  int index = 0;
-
-  final List<String> names = ['Men', 'Women', 'Devices', 'Gadgets', 'Gaming'];
+  const HomeView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        padding: const EdgeInsets.only(top: 100, right: 15, left: 15),
-        child: ListView(
-          // crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SearchTextForm(),
-            const SizedBox(
-              height: 30,
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: DefaultTabController(
+        length: 2,
+        child: Scaffold(
+          // backgroundColor: Colors.black,
+          body: Container(
+            decoration: const BoxDecoration(
+              gradient: kGradient,
             ),
-            const CustomText(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              text: "Categories",
-            ),
-            const SizedBox(
-              height: 30,
-            ),
-            CategoriesListView(),
-            const SizedBox(
-              height: 30,
-            ),
-            const Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            child: Column(
               children: [
-                CustomText(
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
-                  text: 'Best Selling',
+                Padding(
+                  padding: EdgeInsets.only(left: 10, right: 5, top: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const SizedBox(
+                        width: 250,
+                        height: 100,
+                        child: TabBar(
+                          dividerColor: Colors.transparent,
+                          indicatorColor: Colors.transparent,
+                          labelStyle: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w600,
+                            height: 0.09,
+                          ),
+                          unselectedLabelStyle: TextStyle(
+                            color: Color(0xFFC4C4C4),
+                            fontSize: 16,
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w400,
+                            height: 0.09,
+                          ),
+                          unselectedLabelColor: Color(0xFFC4C4C4),
+                          indicatorSize: TabBarIndicatorSize.label,
+                          indicator: UnderlineTabIndicator(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(150),
+                            ),
+                            borderSide: BorderSide(
+                              color: Color(0xFFC4C4C4),
+                              width: 3,
+                            ),
+                            insets:
+                                EdgeInsets.only(right: 50, bottom: 30, left: 0),
+                          ),
+                          tabs: [
+                            Text(
+                              'Collection',
+                            ),
+                            Text(
+                              'Featured',
+                            ),
+                          ],
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          IconButton(
+                            onPressed: () {},
+                            icon: Image.asset(
+                                'assets/images/icons/search-normal.png'),
+                          ),
+                          IconButton(
+                            onPressed: () {},
+                            icon: Image.asset(
+                                'assets/images/icons/notification-bing.png'),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-                CustomText(
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
-                  text: 'See All',
+                Flexible(
+                  child: Container(
+                    padding: EdgeInsets.only(top: 10),
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(30),
+                        topRight: Radius.circular(30),
+                      ),
+                    ),
+                    child: TabBarView(
+                      children: [
+                        CollectionPage(),
+                        FeaturedPage(),
+                      ],
+                    ),
+                  ),
                 ),
               ],
             ),
-            const SizedBox(
-              height: 30,
-            ),
-            ProductsListView(),
-          ],
+          ),
         ),
       ),
     );
   }
-
-  Widget ProductsListView() {
-    return Container(
-      height: 300,
-      child: ListView.separated(
-        separatorBuilder: (context, index) => const SizedBox(
-          width: 15,
-        ),
-        scrollDirection: Axis.horizontal,
-        itemCount: names.length,
-        itemBuilder: (context, index) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                height: 220,
-                width: MediaQuery.of(context).size.width * .4,
-                decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Container(
-                  height: 220,
-                  child: Image.asset(
-                    'assets/images/clock.png',
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              const CustomText(
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-                text: 'BeoPlay Speaker',
-              ),
-              const CustomText(
-                color: Colors.grey,
-                fontSize: 12,
-                text: 'Bang and Olufsen',
-              ),
-              const SizedBox(
-                height: 7,
-              ),
-              const CustomText(
-                color: primaryColor,
-                fontWeight: FontWeight.bold,
-                fontSize: 15,
-                text: '\$755',
-              ),
-            ],
-          );
-        },
-      ),
-    );
-  }
-
-  Container CategoriesListView() {
-    return Container(
-      height: 100,
-      child: ListView.separated(
-        separatorBuilder: (context, index) => const SizedBox(
-          width: 15,
-        ),
-        scrollDirection: Axis.horizontal,
-        itemCount: names.length,
-        itemBuilder: (context, index) {
-          return Column(
-            children: [
-              Container(
-                height: 60,
-                width: 60,
-                decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                  borderRadius: BorderRadius.circular(50),
-                ),
-                child: Image.asset(
-                  'assets/images/dress.png',
-                  color: Colors.red,
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              CustomText(
-                fontSize: 13,
-                text: names[index],
-              )
-            ],
-          );
-        },
-      ),
-    );
-  }
-}
-
-Widget SearchTextForm() {
-  return Container(
-    decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20), color: Colors.grey[200]),
-    child: TextFormField(
-      decoration: const InputDecoration(
-        border: InputBorder.none,
-        prefixIcon: Icon(Icons.search),
-      ),
-    ),
-  );
 }

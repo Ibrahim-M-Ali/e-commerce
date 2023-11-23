@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import '../constants.dart';
 import '../core/view_model/auth_view_model.dart';
 import '../core/view_model/control_view_model.dart';
-import '../view/auth/splash_screen.dart';
+import '../view/auth/login_screen.dart';
 
 class ControlView extends GetWidget<AuthViewModel> {
   @override
@@ -11,7 +12,7 @@ class ControlView extends GetWidget<AuthViewModel> {
     return Obx(
       () {
         return (Get.find<AuthViewModel>().user == null)
-            ? const SplashScreen()
+            ? LoginScreen()
             : GetBuilder<ControlViewModel>(
                 init: ControlViewModel(),
                 builder: (controller) {
@@ -45,13 +46,6 @@ Widget BottomNavBar() {
               label: '',
               icon: Icon(
                 Icons.explore,
-                size: 35,
-              ),
-            ),
-            BottomNavigationBarItem(
-              label: '',
-              icon: Icon(
-                Icons.favorite,
                 size: 35,
               ),
             ),

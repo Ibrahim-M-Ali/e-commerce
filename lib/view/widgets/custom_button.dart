@@ -11,8 +11,11 @@ class CustomButton extends StatelessWidget {
   final Color textColor;
   final void Function()? onPressed;
   final FontWeight? fontWeight;
+  final double? height;
+
   const CustomButton({
     this.fontWeight,
+    this.height,
     this.onPressed,
     this.text = "",
     this.textColor = Colors.white,
@@ -24,16 +27,18 @@ class CustomButton extends StatelessWidget {
       onPressed: onPressed,
       child: Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(5),
-          color: color,
+          gradient: kGradient,
+          borderRadius: BorderRadius.circular(15),
+          // color: Colors.amber,
         ),
-        width: 280,
-        height: 50,
+        width: 120,
+        height: 40,
         child: Center(
           child: CustomText(
             color: textColor,
             text: text,
             fontWeight: fontWeight,
+            height: height,
           ),
         ),
       ),
