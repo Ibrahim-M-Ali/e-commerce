@@ -1,4 +1,4 @@
-# operations
+# e-commerce
 
 A new Flutter project.
 
