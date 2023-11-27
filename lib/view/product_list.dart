@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 
 import 'package:operations/core/view_model/home_view_model.dart';
 
+import 'product_details.dart';
 import 'widgets/product_card.dart';
 
 class ProductList extends StatelessWidget {
@@ -17,12 +18,12 @@ class ProductList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder(
+      body: FutureBuilder<Map<String, dynamic>>(
         future: controller.getProduct(
             prdouctCategory), // Replace with your method that returns a Future
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           } else if (snapshot.hasError) {
@@ -35,20 +36,28 @@ class ProductList extends StatelessWidget {
 
             return GridView.builder(
               shrinkWrap: true,
-              physics: ScrollPhysics(),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              physics: const ScrollPhysics(),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 crossAxisSpacing: 15.0,
                 mainAxisExtent: 290,
               ),
-              itemCount: controller.productModel.length,
+              itemCount: snapshot.data!.length,
               itemBuilder: (BuildContext ctx, index) {
+                var shirtData = snapshot.data![index.toString()];
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 5),
-                  child: ProductCard(
-                    image: controller.productModel[index]['image'],
-                    price: controller.productModel[index]['price'],
-                    productName: controller.productModel[index]['name'],
+                  child: InkWell(
+                    onTap: () {
+                      Get.to(() => ProductDetails(
+                            data: shirtData,
+                          ));
+                    },
+                    child: ProductCard(
+                      image: shirtData['image'],
+                      price: shirtData['price'],
+                      productName: shirtData['name'],
+                    ),
                   ),
                 );
               },

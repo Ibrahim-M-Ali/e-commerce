@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:operations/model/shirt_model.dart';
 import 'package:operations/view/widgets/custom_text.dart';
 import 'package:operations/view/widgets/product_card.dart';
 
 import '../constants.dart';
 import '../core/view_model/home_view_model.dart';
+import 'product_details.dart';
 import 'products_page.dart';
 import 'widgets/category_tab.dart';
 import 'widgets/custom_button.dart';
@@ -50,13 +52,13 @@ class FeaturedPage extends StatelessWidget {
       Column(
         children: [
           Padding(
-            padding: EdgeInsets.only(top: 5),
+            padding: const EdgeInsets.only(top: 5),
             child: Container(
               width: 360,
               height: 208,
               decoration: ShapeDecoration(
                 shadows: [
-                  BoxShadow(
+                  const BoxShadow(
                     color: Colors.black38,
                     blurRadius: 10,
                     offset: Offset(5, 5),
@@ -81,7 +83,7 @@ class FeaturedPage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Align(
+                  const Align(
                     alignment: Alignment.bottomLeft,
                     child: SizedBox(
                       width: 150,
@@ -97,7 +99,7 @@ class FeaturedPage extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 35,
           ),
           Row(
@@ -137,8 +139,8 @@ class FeaturedPage extends StatelessWidget {
           const SizedBox(
             height: 20,
           ),
-          Padding(
-            padding: const EdgeInsets.all(15.0),
+          const Padding(
+            padding: EdgeInsets.all(15.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -159,15 +161,15 @@ class FeaturedPage extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
-          FutureBuilder(
+          FutureBuilder<Map<String, dynamic>>(
             future: controller.getProduct(
                 'popular'), // Replace with your method that returns a Future
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(
+                return const Center(
                   child: CircularProgressIndicator(),
                 );
               } else if (snapshot.hasError) {
@@ -176,24 +178,31 @@ class FeaturedPage extends StatelessWidget {
                   child: Text('Error: ${snapshot.error}'),
                 );
               } else {
-                // Data loaded successfully
-
                 return GridView.builder(
                   shrinkWrap: true,
-                  physics: ScrollPhysics(),
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  physics: const ScrollPhysics(),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 3,
                     crossAxisSpacing: 15.0,
                     mainAxisExtent: 290,
                   ),
                   itemCount: 6,
                   itemBuilder: (BuildContext ctx, index) {
+                    var shirtData = snapshot.data![index.toString()];
+
                     return Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 5),
-                      child: ProductCard(
-                        image: controller.productModel[index]['image'],
-                        price: controller.productModel[index]['price'],
-                        productName: controller.productModel[index]['name'],
+                      child: InkWell(
+                        onTap: () {
+                          Get.to(() => ProductDetails(
+                                data: shirtData,
+                              ));
+                        },
+                        child: ProductCard(
+                          image: shirtData['image'],
+                          price: shirtData['price'],
+                          productName: shirtData['name'],
+                        ),
                       ),
                     );
                   },
@@ -201,11 +210,11 @@ class FeaturedPage extends StatelessWidget {
               }
             },
           ),
-          SizedBox(
+          const SizedBox(
             height: 50,
           ),
-          Padding(
-            padding: const EdgeInsets.all(15.0),
+          const Padding(
+            padding: EdgeInsets.all(15.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -226,15 +235,15 @@ class FeaturedPage extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
-          FutureBuilder(
+          FutureBuilder<Map<String, dynamic>>(
             future: controller.getProduct(
                 'bestSeller'), // Replace with your method that returns a Future
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(
+                return const Center(
                   child: CircularProgressIndicator(),
                 );
               } else if (snapshot.hasError) {
@@ -244,23 +253,33 @@ class FeaturedPage extends StatelessWidget {
                 );
               } else {
                 // Data loaded successfully
+                // List<CloudProductModel> products = snapshot.data!;
 
                 return GridView.builder(
                   shrinkWrap: true,
-                  physics: ScrollPhysics(),
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  physics: const ScrollPhysics(),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 3,
                     crossAxisSpacing: 15.0,
                     mainAxisExtent: 290,
                   ),
                   itemCount: 6,
                   itemBuilder: (BuildContext ctx, index) {
+                    var shirtData = snapshot.data![index.toString()];
+
                     return Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 5),
-                      child: ProductCard(
-                        image: controller.productModel[index]['image'],
-                        price: controller.productModel[index]['price'],
-                        productName: controller.productModel[index]['name'],
+                      child: InkWell(
+                        onTap: () {
+                          Get.to(() => ProductDetails(
+                                data: shirtData,
+                              ));
+                        },
+                        child: ProductCard(
+                          image: shirtData['image'],
+                          price: shirtData['price'],
+                          productName: shirtData['name'],
+                        ),
                       ),
                     );
                   },
@@ -268,11 +287,11 @@ class FeaturedPage extends StatelessWidget {
               }
             },
           ),
-          SizedBox(
+          const SizedBox(
             height: 50,
           ),
-          Padding(
-            padding: const EdgeInsets.all(15.0),
+          const Padding(
+            padding: EdgeInsets.all(15.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -286,7 +305,7 @@ class FeaturedPage extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           Row(
@@ -298,7 +317,7 @@ class FeaturedPage extends StatelessWidget {
                   child: ListView.builder(
                     shrinkWrap: true,
                     scrollDirection: Axis.horizontal,
-                    physics: ScrollPhysics(),
+                    physics: const ScrollPhysics(),
                     itemCount: 4,
                     itemBuilder: (BuildContext ctx, index) {
                       return Padding(

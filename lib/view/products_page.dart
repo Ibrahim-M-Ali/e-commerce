@@ -26,7 +26,7 @@ class ProductsPage extends StatelessWidget {
             child: Column(
               children: [
                 Padding(
-                  padding: EdgeInsets.only(left: 10, right: 5, top: 20),
+                  padding: const EdgeInsets.only(left: 10, right: 5, top: 20),
                   child: Container(
                     height: 100,
                     width: double.infinity,
@@ -37,12 +37,12 @@ class ProductsPage extends StatelessWidget {
                           onPressed: () {
                             Get.back();
                           },
-                          icon: Icon(
+                          icon: const Icon(
                             Icons.arrow_back_ios,
                             color: Colors.white,
                           ),
                         ),
-                        CustomText(
+                        const CustomText(
                           text: 'Popular',
                           color: Colors.white,
                           fontSize: 18,
@@ -58,7 +58,7 @@ class ProductsPage extends StatelessWidget {
                 ),
                 Flexible(
                   child: Container(
-                    padding: EdgeInsets.only(top: 10),
+                    padding: const EdgeInsets.only(top: 10),
                     decoration: const BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.only(
@@ -68,7 +68,7 @@ class ProductsPage extends StatelessWidget {
                     ),
                     child: Column(
                       children: [
-                        TabBar(
+                        const TabBar(
                           labelPadding: EdgeInsets.all(20),
                           indicatorColor: Color(0xFF3B3B3B),
                           labelStyle: TextStyle(

@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
+import 'package:operations/model/shirt_model.dart';
 
 class HomeViewModel extends GetxController {
   List productModel = [];
@@ -11,36 +12,27 @@ class HomeViewModel extends GetxController {
   ValueNotifier<bool> get loading => _loading;
   String? prdouctCategory;
 
-  Future getProduct(prdouctCategory) async {
-    final _productCollectionRef = FirebaseFirestore.instance
+  final _productCollectionRef =
+      FirebaseFirestore.instance.collection('clothes');
+
+  // Future getProduct(prdouctCategory) async {
+  //   var value = await _productCollectionRef.doc(prdouctCategory).get();
+
+  //   Map<String, dynamic> data = value.data() as Map<String, dynamic>;
+  //   productModel = data.values.toList();
+  // }
+
+  Future<Map<String, dynamic>> getProduct(prdouctCategory) async {
+    DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
         .collection('clothes')
         .doc(prdouctCategory)
         .get();
 
-    try {
-      var value = await _productCollectionRef;
-
-      Map<String, dynamic> data = value.data() as Map<String, dynamic>;
-
-      productModel = data.values.toList();
-
-      update();
-    } catch (error) {
-      print('Error fetching products: $error');
+    if (documentSnapshot.exists) {
+      // print(documentSnapshot.data() as Map<String, dynamic>);
+      return documentSnapshot.data() as Map<String, dynamic>;
+    } else {
       return {};
     }
   }
-
-  // getBestSeelingProduct() async {
-  //   _loading.value = true;
-  //   getBestSellingProducts().then(
-  //     (value) {
-  //       for (int i = 0; i < value; i++) {
-  //         _productModel.add(ProductModel.fromJson(value[i].data()));
-  //       }
-  //       _loading.value = false;
-  //       update();
-  //     },
-  //   );
-  // }
 }
