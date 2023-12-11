@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:operations/model/shirt_model.dart';
+
 import 'package:operations/view/widgets/custom_text.dart';
 import 'package:operations/view/widgets/product_card.dart';
 
 import '../constants.dart';
 import '../core/view_model/home_view_model.dart';
+import '../model/product_model.dart';
 import 'product_details.dart';
 import 'products_page.dart';
 import 'widgets/category_tab.dart';
@@ -164,7 +165,7 @@ class FeaturedPage extends StatelessWidget {
           const SizedBox(
             height: 20,
           ),
-          FutureBuilder<Map<String, dynamic>>(
+          FutureBuilder<List<ProductModel>>(
             future: controller.getProduct(
                 'popular'), // Replace with your method that returns a Future
             builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -188,7 +189,7 @@ class FeaturedPage extends StatelessWidget {
                   ),
                   itemCount: 6,
                   itemBuilder: (BuildContext ctx, index) {
-                    var shirtData = snapshot.data![index.toString()];
+                    var shirtData = snapshot.data![index];
 
                     return Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 5),
@@ -199,9 +200,9 @@ class FeaturedPage extends StatelessWidget {
                               ));
                         },
                         child: ProductCard(
-                          image: shirtData['image'],
-                          price: shirtData['price'],
-                          productName: shirtData['name'],
+                          image: shirtData.image,
+                          price: shirtData.price,
+                          productName: shirtData.name,
                         ),
                       ),
                     );
@@ -238,7 +239,7 @@ class FeaturedPage extends StatelessWidget {
           const SizedBox(
             height: 20,
           ),
-          FutureBuilder<Map<String, dynamic>>(
+          FutureBuilder<List<ProductModel>>(
             future: controller.getProduct(
                 'bestSeller'), // Replace with your method that returns a Future
             builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -265,7 +266,7 @@ class FeaturedPage extends StatelessWidget {
                   ),
                   itemCount: 6,
                   itemBuilder: (BuildContext ctx, index) {
-                    var shirtData = snapshot.data![index.toString()];
+                    var shirtData = snapshot.data![index];
 
                     return Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 5),
@@ -276,9 +277,9 @@ class FeaturedPage extends StatelessWidget {
                               ));
                         },
                         child: ProductCard(
-                          image: shirtData['image'],
-                          price: shirtData['price'],
-                          productName: shirtData['name'],
+                          image: shirtData.image,
+                          price: shirtData.price,
+                          productName: shirtData.name,
                         ),
                       ),
                     );

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../chat_view.dart';
 import '../../view/cart_view.dart';
 import '../../view/home_view.dart';
 import '../../view/profile_view.dart';
@@ -23,10 +24,15 @@ class ControlViewModel extends GetxController {
         }
       case 1:
         {
-          _currentScreen = CartView();
+          _currentScreen = ChatView();
           break;
         }
       case 2:
+        {
+          _currentScreen = CartView();
+          break;
+        }
+      case 3:
         {
           _currentScreen = ProfileView();
           break;

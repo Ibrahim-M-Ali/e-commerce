@@ -9,7 +9,7 @@ class ProductModel extends HiveObject {
   @HiveField(0)
   String? name;
   @HiveField(1)
-  int? price;
+  double? price;
   @HiveField(2)
   String? image;
   @HiveField(3)
@@ -18,6 +18,8 @@ class ProductModel extends HiveObject {
   String? id;
   @HiveField(5)
   late double quantity;
+  @HiveField(6)
+  late String? size;
 
   ProductModel({
     this.name,
@@ -26,6 +28,7 @@ class ProductModel extends HiveObject {
     this.description,
     this.id,
     this.quantity = 1,
+    this.size,
   });
 
   ProductModel.fromJson(map) {

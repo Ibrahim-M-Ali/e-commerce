@@ -1,14 +1,18 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import 'package:operations/view/widgets/review_widget.dart';
 
 import '../constants.dart';
+import '../core/view_model/cart_view_model.dart';
+import '../model/product_model.dart';
 import 'widgets/custom_text.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class ProductDetails extends StatefulWidget {
-  final data;
+  final ProductModel? data;
+
   ProductDetails({required this.data});
 
   @override
@@ -27,7 +31,7 @@ class _ProductDetailsState extends State<ProductDetails> {
   // Add your available sizes
   Color? selectedColor;
   List<String> productSizes = ['S', 'M', 'L', 'XL']; // Add your available sizes
-  String? selectedSize;
+  String? selectedSize = 'S';
   List<bool> isExpandedList = [false];
   bool isExpanded = false;
 
@@ -70,7 +74,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                         child: CustomText(
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
-                          text: widget.data['name'],
+                          text: widget.data?.name ?? "",
                           color: Colors.white,
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
@@ -84,7 +88,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                   ),
                 ),
               ),
-              Flexible(
+              Expanded(
                 child: Container(
                   padding: const EdgeInsets.only(top: 10),
                   decoration: const BoxDecoration(
@@ -109,7 +113,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                 topRight: Radius.circular(30),
                               ),
                               image: DecorationImage(
-                                image: NetworkImage(widget.data['image']),
+                                image: NetworkImage(widget.data?.image ?? ""),
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -118,7 +122,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                         Padding(
                           padding: const EdgeInsets.all(10),
                           child: CustomText(
-                            text: widget.data['name'],
+                            text: widget.data?.name ?? "",
                             color: const Color(0xFF3B3B3B),
                             fontSize: 24,
                             fontWeight: FontWeight.w600,
@@ -127,7 +131,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 10),
                           child: CustomText(
-                            text: '\$${widget.data['price'].toString()}',
+                            text: '\$${widget.data?.price.toString()}',
                             color: const Color(0xFF3B3B3B),
                             fontSize: 20,
                             fontWeight: FontWeight.w600,
@@ -139,7 +143,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                             color: const Color(0xFF3B3B3B),
                             fontSize: 14,
                             fontWeight: FontWeight.w400,
-                            text: widget.data['description'],
+                            text: widget.data?.description ?? "",
                           ),
                         ),
                         const SizedBox(height: 30),
@@ -313,6 +317,49 @@ class _ProductDetailsState extends State<ProductDetails> {
                     ),
                   ),
                 ),
+              ),
+              GetBuilder<CartViewModel>(
+                init: CartViewModel(),
+                builder: (controller) {
+                  return Container(
+                    height: 80,
+                    color: Colors.white,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            controller.addProductToCart(
+                              product: ProductModel(
+                                  image: widget.data?.image,
+                                  price: widget.data?.price,
+                                  name: widget.data?.name,
+                                  size: selectedSize!,
+                                  quantity: 1),
+                            );
+                          },
+                          child: Container(
+                            width: 300,
+                            height: 50,
+                            decoration: BoxDecoration(
+                              gradient: kGradient,
+                              borderRadius: BorderRadius.circular(15),
+                              // color: Colors.amber,
+                            ),
+                            child: const Center(
+                              child: CustomText(
+                                text: 'Add To Bag',
+                                color: Colors.white,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
               ),
             ],
           ),

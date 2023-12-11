@@ -38,7 +38,7 @@ class ProductCard extends StatelessWidget {
                   },
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Colors.white24,
+                      color: Colors.black26,
                       borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(20),
                         bottomRight: Radius.circular(20),

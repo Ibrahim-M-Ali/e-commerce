@@ -12,69 +12,59 @@ class CartViewModel extends GetxController {
   double get totalPrice => _totalPrice;
   double _totalPrice = 0.0;
 
-  @override
-  void onInit() {
-    getAllProucts();
+  CartViewModel() {
+    getAllProducts();
     getTotalPrice();
-    super.onInit();
   }
 
-  getAllProucts() async {
+  getAllProducts() async {
     _productList = productsBox.values.toList();
-
     update();
   }
 
   getTotalPrice() {
-    for (int i = 0; i < _productList.length; i++) {
-      _totalPrice += _productList[i].price! * _productList[i].quantity;
-    }
+    _totalPrice = _productList.fold(0.0, (total, product) {
+      return total + product.price! * product.quantity;
+    });
+    _totalPrice = double.parse(_totalPrice.toStringAsFixed(2));
     update();
   }
 
   void addProductToCart({required ProductModel product}) async {
-    if (_productList.isEmpty) {
-      await productsBox.add(product);
-      update();
-      getAllProucts();
-      Get.snackbar('title', 'Added Succses ${productList.length}');
+    if (_productList
+        .any((existingProduct) => existingProduct.name == product.name)) {
+      Get.snackbar('title', 'Already Added');
     } else {
-      bool isProductFound = false;
-      for (int i = 0; i < _productList.length; i++) {
-        if (_productList[i].id == product.id) {
-          Get.snackbar('title', 'Already Added ');
-          isProductFound = true;
-          break;
-        }
-      }
-      if (!isProductFound) {
-        productsBox.add(product);
-        update();
-        getAllProucts();
-        Get.snackbar('title', 'Added Successfully ${productList.length}');
-      }
+      productsBox.add(product);
+      update();
+      getAllProducts();
+      Get.snackbar('title', 'Added Successfully ${productList.length}');
     }
     update();
   }
 
   increaseQuantity(int index) {
     _productList[index].quantity++;
-    _totalPrice += _productList[index].price!;
+    getTotalPrice(); // Update total price when quantity changes
     update();
   }
 
   decreaseQuantity(int index) {
-    _productList[index].quantity--;
-    _totalPrice -= _productList[index].price!;
-    update();
+    if (_productList[index].quantity > 1) {
+      _productList[index].quantity--;
+      getTotalPrice(); // Update total price when quantity changes
+      update();
+    } else {
+      // removeProductFromCart(index);
+    }
   }
 
-  void removeProductFromCart(int index) async {
+  void removeProductFromCart(int index) {
     double removedProductPrice =
         _productList[index].price! * _productList[index].quantity;
 
     _totalPrice -= removedProductPrice;
-
+    _totalPrice = double.parse(_totalPrice.toStringAsFixed(2));
     _productList.removeAt(index);
     productsBox.deleteAt(index);
     update();

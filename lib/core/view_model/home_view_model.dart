@@ -4,7 +4,8 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
-import 'package:operations/model/shirt_model.dart';
+
+import '../../model/product_model.dart';
 
 class HomeViewModel extends GetxController {
   List productModel = [];
@@ -15,24 +16,28 @@ class HomeViewModel extends GetxController {
   final _productCollectionRef =
       FirebaseFirestore.instance.collection('clothes');
 
-  // Future getProduct(prdouctCategory) async {
-  //   var value = await _productCollectionRef.doc(prdouctCategory).get();
-
-  //   Map<String, dynamic> data = value.data() as Map<String, dynamic>;
-  //   productModel = data.values.toList();
-  // }
-
-  Future<Map<String, dynamic>> getProduct(prdouctCategory) async {
+  Future<List<ProductModel>> getProduct(prdouctCategory) async {
     DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
         .collection('clothes')
         .doc(prdouctCategory)
         .get();
 
     if (documentSnapshot.exists) {
-      // print(documentSnapshot.data() as Map<String, dynamic>);
-      return documentSnapshot.data() as Map<String, dynamic>;
+      List<ProductModel> productList = [];
+
+      // Assuming the data in Firestore is a Map<String, dynamic>
+      Map<String, dynamic> data =
+          documentSnapshot.data() as Map<String, dynamic>;
+
+      // Loop through the data and convert it to CloudProductModel instances
+      data.forEach((key, value) {
+        ProductModel product = ProductModel.fromJson(value);
+        productList.add(product);
+      });
+
+      return productList;
     } else {
-      return {};
+      return [];
     }
   }
 }

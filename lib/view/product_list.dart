@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 
 import 'package:operations/core/view_model/home_view_model.dart';
 
+import '../model/product_model.dart';
 import 'product_details.dart';
 import 'widgets/product_card.dart';
 
@@ -18,7 +19,7 @@ class ProductList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder<Map<String, dynamic>>(
+      body: FutureBuilder<List<ProductModel>>(
         future: controller.getProduct(
             prdouctCategory), // Replace with your method that returns a Future
         builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -44,19 +45,19 @@ class ProductList extends StatelessWidget {
               ),
               itemCount: snapshot.data!.length,
               itemBuilder: (BuildContext ctx, index) {
-                var shirtData = snapshot.data![index.toString()];
+                var productData = snapshot.data![index];
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 5),
                   child: InkWell(
                     onTap: () {
                       Get.to(() => ProductDetails(
-                            data: shirtData,
+                            data: productData,
                           ));
                     },
                     child: ProductCard(
-                      image: shirtData['image'],
-                      price: shirtData['price'],
-                      productName: shirtData['name'],
+                      image: productData.image,
+                      price: productData.price,
+                      productName: productData.name,
                     ),
                   ),
                 );

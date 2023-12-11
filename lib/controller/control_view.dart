@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../constants.dart';
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import '../core/view_model/auth_view_model.dart';
 import '../core/view_model/control_view_model.dart';
 import '../view/auth/login_screen.dart';
@@ -31,40 +30,34 @@ Widget BottomNavBar() {
   return GetBuilder<ControlViewModel>(
     init: ControlViewModel(),
     builder: (controller) {
-      return SizedBox(
-        height: 70,
-        child: BottomNavigationBar(
-          type: BottomNavigationBarType.fixed,
-          currentIndex: controller.navigatorValue,
-          selectedItemColor: primaryColor,
-          elevation: 0,
-          onTap: (index) {
-            controller.changeSelectedValue(index);
-          },
-          items: const [
-            BottomNavigationBarItem(
-              label: '',
-              icon: Icon(
-                Icons.explore,
-                size: 35,
-              ),
-            ),
-            BottomNavigationBarItem(
-              label: '',
-              icon: Icon(
-                Icons.shopping_cart,
-                size: 35,
-              ),
-            ),
-            BottomNavigationBarItem(
-              label: '',
-              icon: Icon(
-                Icons.person,
-                size: 35,
-              ),
-            ),
-          ],
-        ),
+      return CurvedNavigationBar(
+        onTap: (index) {
+          controller.changeSelectedValue(index);
+        },
+        height: 65,
+        backgroundColor: Color(0xFF3B3B3B),
+        items: const [
+          Icon(
+            Icons.home,
+            size: 30,
+            color: Color(0xFF3B3B3B),
+          ),
+          Icon(
+            Icons.message,
+            color: Color(0xFF3B3B3B),
+            size: 30,
+          ),
+          Icon(
+            Icons.shopping_bag,
+            color: Color(0xFF3B3B3B),
+            size: 30,
+          ),
+          Icon(
+            Icons.person_rounded,
+            color: Color(0xFF3B3B3B),
+            size: 30,
+          ),
+        ],
       );
     },
   );
